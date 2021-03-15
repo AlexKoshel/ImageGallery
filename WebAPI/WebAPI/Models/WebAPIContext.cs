@@ -43,7 +43,7 @@ namespace WebAPI.Models
                     .HasColumnName("id")
                     .HasDefaultValueSql("uuid_generate_v4()");
 
-                entity.Property(e => e.ImageFile)
+                entity.Property(e => e.ImageData)
                     .IsRequired()
                     .HasColumnName("image");
             });

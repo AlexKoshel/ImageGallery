@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models
 {
@@ -8,7 +6,7 @@ namespace WebAPI.Models
     {
        
         public Guid Id { get; set; }       
-        public byte[] ImageFile { get; set; }
+        public byte[] ImageData { get; set; }
         public virtual Media Media { get; set; }
     }
 }
