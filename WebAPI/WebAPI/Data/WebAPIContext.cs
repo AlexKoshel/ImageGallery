@@ -12,7 +12,6 @@ namespace WebAPI.Models
         }
 
         public virtual DbSet<Gallery> Galleries { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Media> Media { get; set; }
        
         
@@ -33,28 +32,12 @@ namespace WebAPI.Models
                     .IsRequired()
                     .HasMaxLength(32)
                     .HasColumnName("title");
-            });
-
-            modelBuilder.Entity<Image>(entity =>
-            {
-                entity.ToTable("images");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasDefaultValueSql("uuid_generate_v4()");
-
-                entity.Property(e => e.ImageData)
-                    .IsRequired()
-                    .HasColumnName("image");
-            });
+            });           
 
             modelBuilder.Entity<Media>(entity =>
             {
                 entity.ToTable("media");
-
-                entity.HasIndex(e => e.ImageId, "media_imageid_key")
-                    .IsUnique();
-
+                                
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasDefaultValueSql("uuid_generate_v4()");
@@ -66,7 +49,9 @@ namespace WebAPI.Models
 
                 entity.Property(e => e.GalleryId).HasColumnName("galleryid");
 
-                entity.Property(e => e.ImageId).HasColumnName("imageid");
+                entity.Property(e => e.ImageData)
+                     .IsRequired()
+                     .HasColumnName("image");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -77,13 +62,7 @@ namespace WebAPI.Models
                     .WithMany(p => p.Media)
                     .HasForeignKey(d => d.GalleryId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("media_galleryid_fkey");
-
-                entity.HasOne(d => d.Image)
-                    .WithOne(p => p.Media)
-                    .HasForeignKey<Media>(d => d.ImageId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("media_imageid_fkey");
+                    .HasConstraintName("media_galleryid_fkey");                
             });                            
         }        
     }

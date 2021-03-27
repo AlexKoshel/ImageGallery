@@ -40,24 +40,6 @@ namespace WebAPI.Migrations
                     b.ToTable("galleries");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("uuid_generate_v4()");
-
-                    b.Property<byte[]>("ImageFile")
-                        .IsRequired()
-                        .HasColumnType("bytea")
-                        .HasColumnName("image");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("images");
-                });
-
             modelBuilder.Entity("WebAPI.Models.Media", b =>
                 {
                     b.Property<Guid>("Id")
@@ -69,29 +51,27 @@ namespace WebAPI.Migrations
                     b.Property<string>("Discription")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("discription");
 
                     b.Property<Guid>("GalleryId")
                         .HasColumnType("uuid")
                         .HasColumnName("galleryid");
 
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("imageid");
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("image");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
+                        .HasColumnType("character varying(32)")
                         .HasColumnName("name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GalleryId");
-
-                    b.HasIndex(new[] { "ImageId" }, "media_imageid_key")
-                        .IsUnique();
 
                     b.ToTable("media");
                 });
@@ -105,24 +85,10 @@ namespace WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models.Image", "Image")
-                        .WithOne("Media")
-                        .HasForeignKey("WebAPI.Models.Media", "ImageId")
-                        .HasConstraintName("media_imageid_fkey")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Gallery");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Gallery", b =>
-                {
-                    b.Navigation("Media");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Image", b =>
                 {
                     b.Navigation("Media");
                 });
